@@ -1,0 +1,21 @@
+{
+  "name": "url-rewriter",
+  "version": "1.0.0",
+  "description": "An object which rewrites urls according to previously set rules",
+  "main": "main.js",
+  "dependencies": {
+    "pct": "",
+    "y-emitter": "",
+    "u-proto": ""
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/manvalls/url-rewriter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/manvalls/url-rewriter/issues"
+  },
+  "author": "Manuel Valls Fernández <manolo@vlrz.es>",
+  "license": "LGPL-3.0"
+}
