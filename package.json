@@ -1,6 +1,6 @@
 {
   "name": "url-rewriter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An object which rewrites urls according to previously set rules",
   "main": "main.js",
   "dependencies": {
@@ -8,7 +8,6 @@
     "y-emitter": "",
     "u-proto": ""
   },
-
   "repository": {
     "type": "git",
     "url": "git://github.com/manvalls/url-rewriter.git"
