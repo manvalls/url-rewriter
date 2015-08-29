@@ -29,3 +29,7 @@ Undo a previous rewrite call.
 ### urw.compute( URL )
 
 Transform a URL taking into account previously set rewrite rules.
+
+### urw.format( url [, query] [, fragment] )
+
+Add all `query`'s enumerable properties and its respective values to the query part of provided URL, and set its fragment to `fragment`, returning the new decoded URL.

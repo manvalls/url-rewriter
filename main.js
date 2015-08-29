@@ -22,7 +22,7 @@ UrlRewriter.prototype[define]({
   constructor: UrlRewriter,
 
   compute: function(path){
-    var computed = decode(path,this.maxSlashes),
+    var computed = this.format(path),
         i;
 
     if(this[map].hasOwnProperty(computed)) computed = this[map][computed];
@@ -62,36 +62,63 @@ UrlRewriter.prototype[define]({
 
     }else delete this[map][oldPath + ''];
 
+  },
+
+  format: function(url,q,f){
+    var m = ((url || '') + '').match(/([^#\?]*)(?:\?([^#]*))?(?:#(.*))?/),
+        path = m[1] || '',
+        query = m[2] || '',
+        fragment = m[3] || '',
+
+        segments,result,
+        segment,keys,i,j;
+
+    if(typeof q != 'object'){
+      f = q;
+      q = null;
+    }
+
+    if(q){
+
+      if(query) query += '&';
+
+      keys = Object.keys(q);
+      for(j = 0;j < keys.length;j++){
+        i = keys[j];
+        query += pct.encodeComponent(i) + '=' + pct.encodeComponent(q[i]) + '&';
+      }
+
+      query = query.slice(0,-1);
+
+    }
+
+    if(f) fragment = f;
+
+    segments = path.split('/',this.maxSlashes || 1000);
+    result = [];
+
+    segment = segments[segments.length - 1];
+    if(segment == '.' || segment == '..') segments.push('');
+
+    while((segment = segments.shift()) != null) switch(segment){
+      case '..':
+        if(result.length > 1) result.pop();
+      case '.':
+        if(!segments.length) result.push('');
+        break;
+      default:
+        result.push(segment);
+        break;
+    }
+
+    url = result.join('/');
+    if(query) url += '?' + query;
+    if(fragment) url += '#' + fragment;
+
+    return pct.decode(url);
   }
 
 });
-
-// - utils
-
-function decode(url,max){
-  var m = ((url || '') + '').match(/^(.*?)([#\?].*)?$/),
-      path = m[1] || '',
-      rest = m[2] || '',
-      segments = path.split('/',max || 1000),
-      result = [],
-      segment;
-
-  segment = segments[segments.length - 1];
-  if(segment == '.' || segment == '..') segments.push('');
-
-  while((segment = segments.shift()) != null) switch(segment){
-    case '..':
-      if(result.length > 1) result.pop();
-    case '.':
-      if(!segments.length) result.push('');
-      break;
-    default:
-      result.push(segment);
-      break;
-  }
-
-  return pct.decode(result.join('/') + rest);
-}
 
 /*/ exports /*/
 
