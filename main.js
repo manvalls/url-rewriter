@@ -76,6 +76,9 @@ function decode(url,max){
       result = [],
       segment;
 
+  segment = segments[segments.length - 1];
+  if(segment == '.' || segment == '..') segments.push('');
+
   while((segment = segments.shift()) != null) switch(segment){
     case '..':
       if(result.length > 1) result.pop();
