@@ -2,18 +2,14 @@ var pct = require('pct'),
     Target = require('y-emitter').Target,
     define = require('u-proto/define'),
 
-    from = Symbol(),
-    to = Symbol(),
-    map = Symbol();
+    strings = Symbol(),
+    regExps = Symbol();
 
 // UrlRewriter
 
 function UrlRewriter(){
-
-  this[from] = [];
-  this[to] = [];
-  this[map] = {};
-
+  this[strings] = new Map();
+  this[regExps] = new Map();
 }
 
 UrlRewriter.prototype = Object.create(Target.prototype);
@@ -21,47 +17,46 @@ UrlRewriter.prototype[define]({
 
   constructor: UrlRewriter,
 
-  compute: function(path){
-    var computed = this.format(path),
-        i;
+  compute: function(path,info){
+    var strs = this[strings],
+        regs = this[regExps],
+        prev,v,e;
 
-    if(this[map].hasOwnProperty(computed)) computed = this[map][computed];
-    else for(i = 0;i < this[from].length;i++)
-      computed = computed.replace(this[from][i],this[to][i]);
+    path = this.format(path);
 
-    if(computed != path) return this.compute(computed);
-    return computed;
-  },
+    do{
+      prev = path;
 
-  rewrite: function(oldPath,newPath){
-    var i;
-
-    if(oldPath instanceof RegExp){
-
-      i = this[from].indexOf(oldPath);
-
-      if(i == -1){
-        this[from].push(oldPath);
-        this[to].push(newPath);
-      }else this[to][i] = newPath;
-
-    }else this[map][oldPath + ''] = newPath + '';
-
-  },
-
-  unrewrite: function(oldPath){
-    var i;
-
-    if(oldPath instanceof RegExp){
-
-      i = this[from].indexOf(oldPath);
-      if(i != -1){
-        this[from].splice(i,1);
-        this[to].splice(i,1);
+      if((v = strs.get(path)) && v[1].call(this,info)){
+        path = this.format(v[0]);
       }
 
-    }else delete this[map][oldPath + ''];
+      for(e of regs) if( (v = e[1])[1].call(this,info) ){
+        path = this.format(path.replace(e[0],v[0]));
+      }
 
+    }while(prev != path);
+
+    return path;
+  },
+
+  rewrite: function(from,to,test){
+    var map;
+
+    test = test || OK;
+    if(from instanceof RegExp) map = this[regExps];
+    else map = this[strings];
+
+    map.set(from,[to,test]);
+  },
+
+  unrewrite: function(from){
+    var map;
+
+    if(from instanceof RegExp) map = this[regExps];
+    else map = this[strings];
+
+    map.delete(from);
   },
 
   format: function(url,q,f){
@@ -94,24 +89,27 @@ UrlRewriter.prototype[define]({
 
     if(f) fragment = f;
 
-    segments = path.split('/',this.maxSlashes || 1000);
-    result = [];
+    if(/\/\.\.?(\/|$)/.test(path)){
+      segments = path.split('/',this.maxSlashes || 1000);
+      result = [];
 
-    segment = segments[segments.length - 1];
-    if(segment == '.' || segment == '..') segments.push('');
+      segment = segments[segments.length - 1];
+      if(segment == '.' || segment == '..') segments.push('');
 
-    while((segment = segments.shift()) != null) switch(segment){
-      case '..':
-        if(result.length > 1) result.pop();
-      case '.':
-        if(!segments.length) result.push('');
-        break;
-      default:
-        result.push(segment);
-        break;
-    }
+      while((segment = segments.shift()) != null) switch(segment){
+        case '..':
+          if(result.length > 1) result.pop();
+        case '.':
+          if(!segments.length) result.push('');
+          break;
+        default:
+          result.push(segment);
+          break;
+      }
 
-    url = result.join('/');
+      url = result.join('/');
+    }else url = path;
+    
     if(query) url += '?' + query;
     if(fragment) url += '#' + fragment;
 
@@ -119,6 +117,12 @@ UrlRewriter.prototype[define]({
   }
 
 });
+
+// - utils
+
+function OK(){
+  return true;
+}
 
 /*/ exports /*/
 

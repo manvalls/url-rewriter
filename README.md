@@ -18,17 +18,17 @@ console.log(urw.compute('/articles/58361/foo-bar'));
 
 ## UrlRewriter class
 
-### urw.rewrite( from, to )
+### urw.rewrite( from, to [, test] )
 
-Add a rule to the rewriter. If *from* is a `String`, the whole URL is treated as *to*. If it's a `RegExp`, `URL.replace(from, to)` is used instead.
+Add a rule to the rewriter. If *from* is a `String`, the whole URL is treated as *to*. If it's a `RegExp`, `URL.replace(from, to)` is used instead. *test* should be a `Function` which will be called with the current `urlRewriter` as `this` and it's expected to return a `Boolean` indicating whether the current rule should be applied or not.
 
 ### urw.unrewrite( from )
 
 Undo a previous rewrite call.
 
-### urw.compute( URL )
+### urw.compute( url [, info] )
 
-Transform a URL taking into account previously set rewrite rules.
+Transform a URL taking into account previously set rewrite rules. *info* will be used as the only argument of their test functions.
 
 ### urw.format( url [, query] [, fragment] )
 
