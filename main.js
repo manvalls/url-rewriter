@@ -80,6 +80,7 @@ UrlRewriter.prototype[define]({
       keys = Object.keys(q);
       for(j = 0;j < keys.length;j++){
         i = keys[j];
+        if(i.charAt(0) == '_') continue;
         query += pct.encodeComponent(i) + '=' + pct.encodeComponent(q[i]) + '&';
       }
 
@@ -109,7 +110,7 @@ UrlRewriter.prototype[define]({
 
       url = result.join('/');
     }else url = path;
-    
+
     if(query) url += '?' + query;
     if(fragment) url += '#' + fragment;
 
