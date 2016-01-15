@@ -101,7 +101,6 @@ UrlRewriter.prototype[define]({
         case '..':
           if(result.length > 1) result.pop();
         case '.':
-          if(!segments.length) result.push('');
           break;
         default:
           result.push(segment);

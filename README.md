@@ -1,4 +1,4 @@
-# UrlRewriter
+# UrlRewriter [![Build Status][ci-img]][ci-url] [![Coverage Status][cover-img]][cover-url]
 
 ## Sample ussage
 
@@ -33,3 +33,8 @@ Transform a URL taking into account previously set rewrite rules. *info* will be
 ### urw.format( url [, query] [, fragment] )
 
 Add all `query`'s enumerable properties and its respective values to the query part of provided URL, and set its fragment to `fragment`, returning the new decoded URL.
+
+[ci-img]: https://circleci.com/gh/manvalls/url-rewriter.svg?style=shield
+[ci-url]: https://circleci.com/gh/manvalls/url-rewriter
+[cover-img]: https://coveralls.io/repos/manvalls/url-rewriter/badge.svg?branch=master&service=github
+[cover-url]: https://coveralls.io/github/manvalls/url-rewriter?branch=master
