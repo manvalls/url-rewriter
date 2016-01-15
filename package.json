@@ -1,6 +1,6 @@
 {
   "name": "url-rewriter",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "An object which rewrites urls according to previously set rules",
   "main": "main.js",
   "dependencies": {
