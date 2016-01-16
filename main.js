@@ -10,6 +10,7 @@ var pct = require('pct'),
 function UrlRewriter(){
   this[strings] = new Map();
   this[regExps] = new Map();
+  Target.apply(this,arguments);
 }
 
 UrlRewriter.prototype = Object.create(Target.prototype);
