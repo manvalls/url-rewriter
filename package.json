@@ -5,8 +5,8 @@
   "main": "main.js",
   "dependencies": {
     "pct": "^1.1.0",
-    "u-proto": "^5.4.0",
-    "y-emitter": "^8.0.1"
+    "u-proto": "^5.4.5",
+    "y-emitter": "^12.4.0"
   },
   "repository": {
     "type": "git",
