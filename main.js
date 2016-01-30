@@ -1,6 +1,7 @@
 var pct = require('pct'),
     Target = require('y-emitter').Target,
     define = require('u-proto/define'),
+    walk = require('y-walk'),
 
     strings = Symbol(),
     regExps = Symbol();
@@ -115,11 +116,34 @@ UrlRewriter.prototype[define]({
     if(fragment) url += '#' + fragment;
 
     return pct.decode(url);
+  },
+
+  take: function(){
+    return this.on(arguments[0],taker,arguments[1],arguments);
+  },
+
+  capture: function(){
+    return this.on(arguments[0],capturer,arguments[1],arguments);
   }
 
 });
 
 // - utils
+
+
+function* taker(e,d,cb,args){
+  yield e.take();
+  args[0] = e;
+  args[1] = d;
+  if(cb) walk(cb,args,this);
+}
+
+function* capturer(e,d,cb,args){
+  yield e.capture();
+  args[0] = e;
+  args[1] = d;
+  if(cb) walk(cb,args,this);
+}
 
 function OK(){
   return true;

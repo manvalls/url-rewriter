@@ -1,5 +1,6 @@
 var t = require('u-test'),
     assert = require('assert'),
+    Lock = require('y-lock'),
     UrlRewriter = require('../main.js');
 
 t('rewrite, unrewrite & compute',function(){
@@ -61,4 +62,64 @@ t('format',function(){
     '/'
   );
 
+});
+
+t('take and capture',function*(){
+  var emitter = Symbol(),
+      urw = new UrlRewriter(emitter),
+      last,lock,det;
+
+  function onCapture(e,d,foo){
+    last = 'capture';
+    assert.equal(lock,e);
+    assert.equal(d,det);
+    assert.equal(foo,'bar');
+  }
+
+  function onTake(e,d,foo){
+    last = 'take';
+    assert.equal(lock,e);
+    assert.equal(d,det);
+    assert.equal(foo,'bar');
+  }
+
+  last = null;
+  det = urw.take('test 1',onTake,'bar');
+  lock = new Lock(0);
+  urw[emitter].give('test 1',lock);
+  assert.strictEqual(last,null);
+  lock.give();
+  assert.strictEqual(last,'take');
+
+  last = null;
+  urw.take('test 2');
+  urw.take('test 3');
+  det = urw.capture('test 3',onCapture,'bar');
+
+  lock = new Lock(0);
+  urw[emitter].give('test 2',lock);
+  urw[emitter].give('test 3',lock);
+  assert.strictEqual(last,null);
+  lock.give();
+  assert.strictEqual(last,'capture');
+
+  last = null;
+  urw.capture('test 4');
+  det = urw.take('test 4',onTake,'bar');
+
+  lock = new Lock(0);
+  urw[emitter].give('test 4',lock);
+  assert.strictEqual(last,null);
+  lock.give();
+  assert.strictEqual(last,null);
+
+  last = null;
+  urw.take('test 5');
+  det = urw.take('test 5',onTake,'bar');
+
+  lock = new Lock(0);
+  urw[emitter].give('test 5',lock);
+  assert.strictEqual(last,null);
+  lock.give();
+  assert.strictEqual(last,null);
 });

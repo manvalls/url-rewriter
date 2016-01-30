@@ -34,6 +34,28 @@ Transform a URL taking into account previously set rewrite rules. *info* will be
 
 Add all `query`'s enumerable properties and its respective values to the query part of provided URL, and set its fragment to `fragment`, returning the new decoded URL.
 
+### urw.take( event [, callback [, ...args] ] )
+
+An equivalent of:
+
+```javascript
+urw.on(event,function*(e,d){
+  yield e.take();
+  if(callback) callback(e,d,..args);
+});
+```
+
+### urw.capture( event [, callback [, ...args] ] )
+
+An equivalent of:
+
+```javascript
+urw.on(event,function*(e,d){
+  yield e.capture();
+  if(callback) callback(e,d,..args);
+});
+```
+
 [ci-img]: https://circleci.com/gh/manvalls/url-rewriter.svg?style=shield
 [ci-url]: https://circleci.com/gh/manvalls/url-rewriter
 [cover-img]: https://coveralls.io/repos/manvalls/url-rewriter/badge.svg?branch=master&service=github
