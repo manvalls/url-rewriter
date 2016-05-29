@@ -5,8 +5,8 @@
   "main": "main.js",
   "dependencies": {
     "pct": "^1.1.0",
-    "u-proto": "^5.4.5",
-    "y-emitter": "^12.4.0"
+    "u-proto": "^6.5.0",
+    "y-emitter": "^12.4.2"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "test": "u-test"
   },
   "devDependencies": {
-    "u-test": "^3.4.0",
-    "y-lock": "^3.1.0"
+    "u-test": "^3.7.3",
+    "y-lock": "^3.1.1"
   }
 }
