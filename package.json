@@ -4,9 +4,9 @@
   "description": "An object which rewrites urls according to previously set rules",
   "main": "main.js",
   "dependencies": {
-    "pct": "^1.1.0",
-    "u-proto": "^6.5.0",
-    "y-emitter": "^12.4.2"
+    "pct": "^1.1.1",
+    "u-proto": "^7.1.6",
+    "y-emitter": "^13.0.0"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "test": "u-test"
   },
   "devDependencies": {
-    "u-test": "^3.7.3",
-    "y-lock": "^3.1.1"
+    "u-test": "^3.8.11",
+    "y-lock": "^3.1.6"
   }
 }

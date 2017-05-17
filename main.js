@@ -8,18 +8,15 @@ var pct = require('pct'),
 
 // UrlRewriter
 
-function UrlRewriter(){
-  this[strings] = new Map();
-  this[regExps] = new Map();
-  Target.apply(this,arguments);
-}
+class UrlRewriter extends Target{
 
-UrlRewriter.prototype = Object.create(Target.prototype);
-UrlRewriter.prototype[define]({
+  constructor(...args){
+    super(...args);
+    this[strings] = new Map();
+    this[regExps] = new Map();
+  }
 
-  constructor: UrlRewriter,
-
-  compute: function(path,info){
+  compute(path, info){
     var strs = this[strings],
         regs = this[regExps],
         prev,v,e;
@@ -40,9 +37,9 @@ UrlRewriter.prototype[define]({
     }while(prev != path);
 
     return path;
-  },
+  }
 
-  rewrite: function(from,to,test){
+  rewrite(from, to, test){
     var map;
 
     test = test || OK;
@@ -50,18 +47,18 @@ UrlRewriter.prototype[define]({
     else map = this[strings];
 
     map.set(from,[to,test]);
-  },
+  }
 
-  unrewrite: function(from){
+  unrewrite(from){
     var map;
 
     if(from instanceof RegExp) map = this[regExps];
     else map = this[strings];
 
     map.delete(from);
-  },
+  }
 
-  format: function(url,q,f){
+  format(url, q, f){
     var m = ((url || '') + '').match(/([^#\?]*)(?:\?([^#]*))?(?:#(.*))?/),
         path = m[1] || '',
         query = m[2] || '',
@@ -116,17 +113,17 @@ UrlRewriter.prototype[define]({
     if(fragment) url += '#' + fragment;
 
     return pct.decode(url);
-  },
+  }
 
-  take: function(){
+  take(){
     return this.on(arguments[0],taker,arguments[1],arguments);
-  },
+  }
 
-  capture: function(){
+  capture(){
     return this.on(arguments[0],capturer,arguments[1],arguments);
   }
 
-});
+}
 
 // - utils
 
