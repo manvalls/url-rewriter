@@ -105,7 +105,7 @@ t('take and capture',function*(){
 
   last = null;
   urw.capture('test 4');
-  det = urw.take('test 4',onTake,'bar');
+  det = urw.listen('test 4',onTake,'bar');
 
   lock = new Lock(0);
   urw[emitter].give('test 4',lock);

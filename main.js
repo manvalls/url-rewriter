@@ -115,6 +115,10 @@ class UrlRewriter extends Target{
     return pct.decode(url);
   }
 
+  listen(...args){
+    return this.take(...args);
+  }
+
   take(){
     return this.on(arguments[0],taker,arguments[1],arguments);
   }
