@@ -112,6 +112,8 @@ t('take and capture',function*(){
   assert.strictEqual(last,null);
   lock.give();
   assert.strictEqual(last,null);
+  lock.give();
+  assert.strictEqual(last,'take');
 
   last = null;
   urw.take('test 5');

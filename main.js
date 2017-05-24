@@ -115,8 +115,8 @@ class UrlRewriter extends Target{
     return pct.decode(url);
   }
 
-  listen(...args){
-    return this.take(...args);
+  listen(){
+    return this.on(arguments[0],listener,arguments[1],arguments);
   }
 
   take(){
@@ -131,6 +131,19 @@ class UrlRewriter extends Target{
 
 // - utils
 
+function* listener(e,d,cb,args){
+
+  yield e.take();
+  args[0] = e;
+  args[1] = d;
+
+  try{
+    if(cb) yield walk(cb,args,this);
+  }finally{
+    e.accept();
+  }
+
+}
 
 function* taker(e,d,cb,args){
   yield e.take();
