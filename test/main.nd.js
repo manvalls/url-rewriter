@@ -113,7 +113,6 @@ t('take and capture',function*(){
   lock.give();
   assert.strictEqual(last,null);
   lock.give();
-  assert.strictEqual(last,'take');
   yield lock;
 
   last = null;
