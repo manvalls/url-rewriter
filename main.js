@@ -65,7 +65,7 @@ class UrlRewriter extends Target{
         fragment = m[3] || '',
 
         segments,result,
-        segment,keys,i,j;
+        segment,keys,i,j,values;
 
     if(typeof q != 'object'){
       f = q;
@@ -80,7 +80,12 @@ class UrlRewriter extends Target{
       for(j = 0;j < keys.length;j++){
         i = keys[j];
         if(i.charAt(0) == '_') continue;
-        query += pct.encodeComponent(i) + '=' + pct.encodeComponent(q[i]) + '&';
+
+        values = [].concat(q[i]);
+        for(let value of values){
+          query += pct.encodeComponent(i) + '=' + pct.encodeComponent(value) + '&';
+        }
+
       }
 
       query = query.slice(0,-1);
