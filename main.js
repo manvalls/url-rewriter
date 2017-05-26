@@ -65,7 +65,7 @@ class UrlRewriter extends Target{
         fragment = m[3] || '',
 
         segments,result,
-        segment,keys,i,j,length,values,comp,re;
+        segment,keys,i,j,values,comp,re;
 
     if(typeof q != 'object'){
       f = q;
@@ -83,24 +83,11 @@ class UrlRewriter extends Target{
         comp = pct.encodeComponent(i);
 
         re = new RegExp('/' + escapeRegExp(comp) + '/\\$(?=$|/)');
-        length = comp.length + 3;
-
-
-        if(path.match(re)){
-
-          values = [].concat(q[i]);
-          for(let value of values){
-            path = path.replace(re, `/${comp.replace(/\$/g, '$$')}/${pct.encodeComponent(value).replace(/\$/g, '$$')}`);
-          }
-
-          continue;
-        }
-
-        if(i.charAt(0) == '_') continue;
 
         values = [].concat(q[i]);
         for(let value of values){
-          query += comp + '=' + pct.encodeComponent(value) + '&';
+          if(path.match(re)) path = path.replace(re, `/${comp.replace(/\$/g, '$$')}/${pct.encodeComponent(value).replace(/\$/g, '$$')}`);
+          else if(i.charAt(0) != '_') query += comp + '=' + pct.encodeComponent(value) + '&';
         }
 
       }
