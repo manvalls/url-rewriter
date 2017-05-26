@@ -48,6 +48,11 @@ t('format',function(){
   );
 
   assert.strictEqual(
+    urw.format('/param1/$foo/param1/$/param2/$/param1/$',{param1: ['?',2], param2: 'foo', foo: 'bar'}),
+    '/param1/$foo/param1/%3F/param2/foo/param1/2?foo=bar'
+  );
+
+  assert.strictEqual(
     urw.format('/?foo=bar',{answer: 42, _id: 5},'hi'),
     '/?foo=bar&answer=42#hi'
   );
